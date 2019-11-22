@@ -5,10 +5,28 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+
+class  SomeDataServiceStub implements  SomeDataService{
+
+    @Override
+    public int[] retrieveAllData() {
+        return new int[]{1,2,3};
+    }
+}
+
+class  SomeDataServiceEmptyStub implements  SomeDataService{
+
+    @Override
+    public int[] retrieveAllData() {
+        return new int[]{};
+    }
+}
 
 @SpringBootTest
-class SomeBusinessImplTest {
+class SomeBusinessImplStubTest {
 
     private SomeBusinessImpl someBusiness;
 
@@ -28,8 +46,9 @@ class SomeBusinessImplTest {
 
     @Test
     public   void  calculateSum_basic(){
-        int actuarResult = someBusiness.calculateSum(new int[] {1,2,3});
+        someBusiness.setSomeDataService(new SomeDataServiceStub());
 
+        int actuarResult = someBusiness.calculateSumWithDataService();
         int expectedResult = 6;
         assertEquals(actuarResult , expectedResult);
     }
@@ -37,8 +56,9 @@ class SomeBusinessImplTest {
 
     @Test
     public   void  calculateSum_empty(){
-        int actuarResult = someBusiness.calculateSum(new int[] {});
+        someBusiness.setSomeDataService(new SomeDataServiceEmptyStub());
 
+        int actuarResult = someBusiness.calculateSumWithDataService();
         int expectedResult = 0;
         assertEquals(actuarResult , expectedResult);
     }
