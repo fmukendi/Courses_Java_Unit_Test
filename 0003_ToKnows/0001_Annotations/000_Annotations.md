@@ -73,3 +73,38 @@ class SomeBusinessImplMockTest {
 }
 
 ```
+
+
+* (2) ``` @MockBean @Mock```
+
+* (2) ``` @DataJpaTest```
+
+
+* (3) ``` @WebMvcTest```
+
+* (4) ``` @SpringBootTest @TestPropertySource```
+```
+Intergration Test
+
+```
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations = {"classpath:test-configuration.properties"})
+public class ItemControllerIT {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @MockBean
+    private ItemRepository itemRepository;
+
+    @Test
+    public  void contextLoads() throws JSONException {
+       String reponse = this.restTemplate.getForObject("/get-all-items-from-database", String.class);
+        JSONAssert.assertEquals("[{id:1001},{id:1002},{id:1003}]", reponse, false);
+    }
+}
+
+````
+
